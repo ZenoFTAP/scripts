@@ -5,7 +5,7 @@ local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 local PlayerService = game:GetService("Players")
 local UserService = game:GetService("UserService")
-
+Slider
 local LocalPlayer = PlayerService.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
@@ -2470,5 +2470,3 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
-
-
