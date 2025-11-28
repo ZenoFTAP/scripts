@@ -29,7 +29,7 @@ local OrionLib = {
 			Second = Color3.fromRGB(10, 10, 10),
 			Stroke = Color3.fromRGB(30, 30, 30),
 			Divider = Color3.fromRGB(30, 30, 30),
-			Text = Color3.fromRGB(139,0,0),
+			Text = Color3.fromRGB(255,0,0),
 			TextDark = Color3.fromRGB(110, 110, 110), 
 		}
 	},
@@ -2470,3 +2470,4 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
+
