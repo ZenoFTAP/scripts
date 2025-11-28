@@ -29,7 +29,7 @@ local OrionLib = {
 			Second = Color3.fromRGB(10, 10, 10),
 			Stroke = Color3.fromRGB(30, 30, 30),
 			Divider = Color3.fromRGB(30, 30, 30),
-			Text = Color3.fromRGB(255,0,0),
+			Text = Color3.fromRGB(139,0,0),
 			TextDark = Color3.fromRGB(110, 110, 110), 
 		}
 	},
@@ -62,7 +62,7 @@ local Orion = Instance.new("ScreenGui")
 
 local FocusDrag = nil
 
-Orion.Name = "OrionSEX"
+Orion.Name = "OrionV"
 
 getgenv().gethui = function() return game.CoreGui end
 
@@ -248,7 +248,7 @@ local function LoadCfg(Config)
 				end    
 			end)
 		else
-			warn("OrionNigger Library Config Loader - Could not find ", a ,b)
+			warn("OrionV Library Config Loader - Could not find ", a ,b)
 		end
 	end)
 end
@@ -522,7 +522,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	
 
 	WindowConfig = WindowConfig or {}
-	WindowConfig.Name = WindowConfig.Name or "Orion Library"
+	WindowConfig.Name = WindowConfig.Name or "OrionV Library"
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -531,7 +531,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	end
 	WindowConfig.FreeMouse = WindowConfig.FreeMouse or false
 	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "K"
-	WindowConfig.IntroText = WindowConfig.IntroText or "Orion Library"
+	WindowConfig.IntroText = WindowConfig.IntroText or "OrionV Library"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://8834748103"
@@ -2470,4 +2470,3 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
-
