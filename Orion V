@@ -5,7 +5,7 @@ local HttpService = game:GetService("HttpService")
 local CoreGui = game:GetService("CoreGui")
 local PlayerService = game:GetService("Players")
 local UserService = game:GetService("UserService")
-  
+
 local LocalPlayer = PlayerService.LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 
@@ -30,7 +30,7 @@ local OrionLib = {
 			Stroke = Color3.fromRGB(30, 30, 30),
 			Divider = Color3.fromRGB(30, 30, 30),
 			Text = Color3.fromRGB(255,0,0),
-			TextDark = Color3.fromRGB(110, 110, 110), 
+			TextDark = Color3.fromRGB(128,128,128), 
 		}
 	},
 	SelectedTheme = "OrionV",
@@ -522,7 +522,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	
 
 	WindowConfig = WindowConfig or {}
-	WindowConfig.Name = WindowConfig.Name or "Welcome MIKOHUB V1 (OrionV)"
+	WindowConfig.Name = WindowConfig.Name or "Welcome MIKOHUB V1"
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -530,8 +530,8 @@ function OrionLib:MakeWindow(WindowConfig)
 		WindowConfig.IntroEnabled = true
 	end
 	WindowConfig.FreeMouse = WindowConfig.FreeMouse or false
-	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "K"
-	WindowConfig.IntroText = WindowConfig.IntroText or "Welcome MIKOHUB V1 (OrionV)"
+	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "M"
+	WindowConfig.IntroText = WindowConfig.IntroText or "Welcome MIKOHUB V1"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://127144408861646"
@@ -553,7 +553,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	{
 		BackgroundTransparency = 0, 
 		Parent = Orion, 
-		Text =  "OpenGUI",
+		Text =  "GUI",
 		TextScaled = true,
 		TextSize = 14,
 		TextColor3 = Color3.new(0, 0, 0),
@@ -2470,4 +2470,3 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
-
