@@ -41,7 +41,7 @@ local OrionLib = {
 			Text = Color3.fromRGB(128, 128, 128),
 			TextDark = Color3.fromRGB(128,128,128), 
 		}
-	}
+	},
 	SelectedTheme = "OrionV",
 	Folder = nil,
 	SaveCfg = false
@@ -544,7 +544,7 @@ function OrionLib:MakeWindow(WindowConfig)
     WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
     WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://127144408861646"
     WindowConfig.IntroIcon = WindowConfig.IntroIcon or "rbxassetid://127144408861646"
-    WindowConfig.Themes = WindowConfig.Themes or OrionLib.SelectedTheme  -- ★追加
+    WindowConfig.Themes = WindowConfig.Themes or OrionLib.SelectedTheme "OrionV" -- ★追加
 
     -- テーマを反映
     if OrionLib.Themes[WindowConfig.Themes] then
@@ -2506,5 +2506,6 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
+
 
 
