@@ -745,7 +745,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		OrionLib:MakeNotification({
 			Name = "UI has been hidden.",
 			Content = "Press "  .. WindowConfig.KeyToOpenWindow .. " to reopen the UI. ",
-			Time = 3
+			Time = 2
 		})
 
 		showMobileOpenButton()
@@ -772,7 +772,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				OrionLib:MakeNotification({
 					Name = "UI has been hidden.",
 					Content = "Press "  .. WindowConfig.KeyToOpenWindow .. " to reopen the UI. ",
-					Time = 3
+					Time = 2
 				})
 
 				showMobileOpenButton()
