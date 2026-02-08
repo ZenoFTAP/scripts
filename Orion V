@@ -428,13 +428,13 @@ local NotificationHolder = SetProps(SetChildren(MakeElement("TFrame"), {
 	SetProps(MakeElement("List"), {
 		HorizontalAlignment = Enum.HorizontalAlignment.Center,
 		SortOrder = Enum.SortOrder.LayoutOrder,
-		VerticalAlignment = Enum.VerticalAlignment.Bottom,
+			VerticalAlignment = Enum.VerticalAlignment.Top,
 		Padding = UDim.new(0, 5)
 	})
 }), {
-	Position = UDim2.new(1, -25, 1, -25),
+	Position = UDim2.new(1, -25, 0, 25),
 	Size = UDim2.new(0, 300, 1, -25),
-	AnchorPoint = Vector2.new(1, 1),
+	AnchorPoint = Vector2.new(1, 0),
 	Parent = Orion
 })
 
@@ -522,7 +522,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	
 
 	WindowConfig = WindowConfig or {}
-	WindowConfig.Name = WindowConfig.Name or "Welcome MIKOHUB V1"
+	WindowConfig.Name = WindowConfig.Name or "VELX HUB"
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -530,8 +530,8 @@ function OrionLib:MakeWindow(WindowConfig)
 		WindowConfig.IntroEnabled = true
 	end
 	WindowConfig.FreeMouse = WindowConfig.FreeMouse or false
-	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "M"
-	WindowConfig.IntroText = WindowConfig.IntroText or "Welcome MIKOHUB V1"
+	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "V"
+	WindowConfig.IntroText = WindowConfig.IntroText or "VELX HUB"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://127144408861646"
@@ -553,7 +553,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	{
 		BackgroundTransparency = 0, 
 		Parent = Orion, 
-		Text =  "GUI",
+		Text =  "UI",
 		TextScaled = true,
 		TextSize = 14,
 		TextColor3 = Color3.new(0, 0, 0),
@@ -2470,4 +2470,3 @@ function OrionLib:Destroy()
 end
 
 return OrionLib
-
