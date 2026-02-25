@@ -531,7 +531,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	end
 	WindowConfig.FreeMouse = WindowConfig.FreeMouse or false
 	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "K"
-	WindowConfig.IntroText = WindowConfig.IntroText or "NB-HUB [KEYSYSTEM]"
+	WindowConfig.IntroText = WindowConfig.IntroText or "NB-HUB [KEY-SYSTEM]"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://118739401073899"
