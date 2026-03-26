@@ -424,6 +424,22 @@ CreateElement("Label", function(Text, TextSize, Transparency)
 	return Label
 end)
 
+CreateElement("TextBox", function(Text, Placeholder)
+	local TextBox = Create("TextBox", {
+		Text = Text or "",
+		PlaceholderText = Placeholder or "",
+		TextColor3 = Color3.fromRGB(240, 240, 240),
+		PlaceholderColor3 = Color3.fromRGB(150, 150, 150),
+		TextSize = 15,
+		Font = Enum.Font.Gotham,
+		BackgroundTransparency = 1,
+		BorderSizePixel = 0,
+		ClearTextOnFocus = false,
+		TextXAlignment = Enum.TextXAlignment.Left
+	})
+	return TextBox
+end)
+
 local NotificationHolder = SetProps(SetChildren(MakeElement("TFrame"), {
 	SetProps(MakeElement("List"), {
 		HorizontalAlignment = Enum.HorizontalAlignment.Center,
