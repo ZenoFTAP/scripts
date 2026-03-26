@@ -538,7 +538,7 @@ function OrionLib:MakeWindow(WindowConfig)
 	
 
 	WindowConfig = WindowConfig or {}
-	WindowConfig.Name = WindowConfig.Name or "VELX HUB"
+	WindowConfig.Name = WindowConfig.Name or "OrionZ Library"
 	WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
 	WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
 	WindowConfig.HidePremium = WindowConfig.HidePremium or false
@@ -546,8 +546,8 @@ function OrionLib:MakeWindow(WindowConfig)
 		WindowConfig.IntroEnabled = true
 	end
 	WindowConfig.FreeMouse = WindowConfig.FreeMouse or false
-	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "V"
-	WindowConfig.IntroText = WindowConfig.IntroText or "VELX HUB"
+	WindowConfig.KeyToOpenWindow = WindowConfig.KeyToOpenWindow or "RightControl"
+	WindowConfig.IntroText = WindowConfig.IntroText or "OrionZ Library"
 	WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
 	WindowConfig.ShowIcon = WindowConfig.ShowIcon or false
 	WindowConfig.Icon = WindowConfig.Icon or "rbxassetid://127144408861646"
@@ -581,53 +581,76 @@ function OrionLib:MakeWindow(WindowConfig)
 		Position = UDim2.new(0.5, 0, 0.5, 0), 
 		Visible = false, 
 		Font = Enum.Font.GothamBold
-	}), {MakeElement("Corner", 0.25), SetProps(MakeElement("AspectRatio"), {DominantAxis = 0, AspectRatio = 0.986, AspectType = 1})})
+	}), {
+		MakeElement("Corner", 0.25),
+		SetProps(MakeElement("AspectRatio"), {
+			DominantAxis = 0,
+			AspectRatio = 0.986,
+			AspectType = 1
+		})
+	})
 
 	MakeDraggable(MobileOpenButton, MobileOpenButton)
-    
--- 1. まずは TabHolder を作成（これがないと検索対象が見つからないぜ）
-    local TabHolder = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 4), {
-        Size = UDim2.new(1, 0, 1, -50),
-        Position = UDim2.new(0, 0, 0, 50) -- 検索窓の高さ(50px)分、下にずらす
-    }), {
-        MakeElement("List"),
-        MakeElement("Padding", 8, 0, 0, 8)
-    }), "Divider")
 
-    -- 2. 次に SearchBox を作成（TabHolderが定義された後なので Parent = TabHolder.Parent が使える）
-    local SearchBox = AddThemeObject(SetChildren(SetProps(MakeElement("TextBox"), {
-        Name = "ZenoSearchBox",
-        Parent = TabHolder.Parent, -- これでサイドバー(Mainの左側)に入るぜ
-        Size = UDim2.new(1, -16, 0, 30),
-        Position = UDim2.new(0, 8, 0, 10),
-        BackgroundColor3 = Color3.fromRGB(15, 15, 20),
-        PlaceholderText = "Search Tabs...",
-        Text = "",
-        TextColor3 = Color3.fromRGB(255, 255, 255),
-        Font = Enum.Font.GothamSemibold,
-        TextSize = 12,
-        ClearTextOnFocus = false
-    }), {
-        MakeElement("Corner", 0, 6),
-        SetProps(MakeElement("Padding", 0, 10, 0, 0), {PaddingLeft = UDim.new(0, 10)})
-    }), "Second")
+	-- SearchBox
+	local SearchBox = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(15, 15, 20), 0, 6), {
+		Size = UDim2.new(1, -16, 0, 30),
+		Position = UDim2.new(0, 8, 0, 10),
+		Name = "SearchBoxFrame"
+	}), {
+		MakeElement("Padding", 0, 10, 10, 0),
+		SetProps(MakeElement("TextBox"), {
+			Name = "Input",
+			Size = UDim2.new(1, 0, 1, 0),
+			BackgroundTransparency = 1,
+			PlaceholderText = "Search Tabs...",
+			Text = "",
+			TextColor3 = Color3.fromRGB(255, 255, 255),
+			PlaceholderColor3 = Color3.fromRGB(150, 150, 150),
+			Font = Enum.Font.GothamSemibold,
+			TextSize = 12,
+			ClearTextOnFocus = false
+		})
+	}), "Second")
 
-    -- 3. 検索の実行ロジック
-    AddConnection(SearchBox:GetPropertyChangedSignal("Text"), function()
-        local Input = SearchBox.Text:lower()
-        for _, btn in pairs(TabHolder:GetChildren()) do
-            -- ボタン（タブ）に対してのみ表示・非表示を切り替える
-            if btn:IsA("GuiButton") or btn:IsA("TextButton") then
-                -- ボタンの名前、または中にあるTextLabelの文字で検索
-                local btnText = btn:FindFirstChild("TextLabel") and btn.TextLabel.Text or btn.Name
-                if btnText:lower():find(Input) then
-                    btn.Visible = true
-                else
-                    btn.Visible = false
-                end
-            end
-        end
-    end)
+	-- TabHolder
+	local TabHolder = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 4), {
+		Size = UDim2.new(1, 0, 1, -90),
+		Position = UDim2.new(0, 0, 0, 50),
+		Name = "TabHolder",
+		BackgroundTransparency = 1,
+		ScrollingDirection = Enum.ScrollingDirection.Y
+	}), {
+		MakeElement("List"),
+		MakeElement("Padding", 8, 8, 8, 8)
+	}), "Divider")
+
+	AddConnection(TabHolder.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
+		TabHolder.CanvasSize = UDim2.new(0, 0, 0, TabHolder.UIListLayout.AbsoluteContentSize.Y + 16)
+	end)
+
+	-- 検索処理
+	AddConnection(SearchBox.Input:GetPropertyChangedSignal("Text"), function()
+		local Input = SearchBox.Input.Text:lower()
+
+		for _, btn in pairs(TabHolder:GetChildren()) do
+			if btn:IsA("TextButton") then
+				local btnText = ""
+
+				if btn:FindFirstChild("Title") and btn.Title:IsA("TextLabel") then
+					btnText = btn.Title.Text
+				else
+					btnText = btn.Name
+				end
+
+				if Input == "" or btnText:lower():find(Input) then
+					btn.Visible = true
+				else
+					btn.Visible = false
+				end
+			end
+		end
+	end)
 
 	AddConnection(TabHolder.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"), function()
 		TabHolder.CanvasSize = UDim2.new(0, 0, 0, TabHolder.UIListLayout.AbsoluteContentSize.Y + 16)
