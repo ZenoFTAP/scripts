@@ -594,29 +594,44 @@ function OrionLib:MakeWindow(WindowConfig)
 
 	local SearchBox = AddThemeObject(SetChildren(SetProps(MakeElement("Frame"), {
 		Name = "SearchBoxFrame",
-		Size = UDim2.new(1, -16, 0, 30),
+		Size = UDim2.new(1, -16, 0, 34),
 		Position = UDim2.new(0, 8, 0, 10),
 		BackgroundColor3 = Color3.fromRGB(15, 15, 20),
-		BorderSizePixel = 0
+		BorderSizePixel = 0,
+		ZIndex = 5
 	}), {
 		MakeElement("Corner", 0, 6),
 
+		SetProps(Create("UIStroke"), {
+			Name = "RainbowStroke",
+			Color = Color3.fromRGB(255, 255, 255),
+			Thickness = 1.5,
+			Transparency = 0,
+			ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+		}),
+
 		SetProps(MakeElement("TextBox"), {
 			Name = "Input",
-			Parent = nil,
 			Size = UDim2.new(1, -20, 1, 0),
 			Position = UDim2.new(0, 10, 0, 0),
 			BackgroundTransparency = 1,
-			PlaceholderText = "Search Tabs...",
+			PlaceholderText = "Search",
 			Text = "",
 			TextColor3 = Color3.fromRGB(255, 255, 255),
 			PlaceholderColor3 = Color3.fromRGB(150, 150, 150),
 			Font = Enum.Font.GothamSemibold,
 			TextSize = 12,
 			ClearTextOnFocus = false,
-			TextXAlignment = Enum.TextXAlignment.Left
+			TextXAlignment = Enum.TextXAlignment.Left,
+			ZIndex = 6
 		})
 	}), "Second")
+
+	AddConnection(RunService.RenderStepped, function()
+		if SearchBox and SearchBox:FindFirstChild("RainbowStroke") then
+			SearchBox.RainbowStroke.Color = Color3.fromHSV((tick() * 0.15) % 1, 1, 1)
+		end
+	end)
 
 	local TabHolder = AddThemeObject(SetChildren(SetProps(MakeElement("ScrollFrame", Color3.fromRGB(255, 255, 255), 4), {
 		Size = UDim2.new(1, 0, 1, -90),
