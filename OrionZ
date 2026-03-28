@@ -468,7 +468,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         NotificationParent.BackgroundTransparency = 1
         NotificationParent.Parent = NotificationHolder
 
-        -- 通知メイン
         local NotificationFrame = Instance.new("Frame")
         NotificationFrame.Name = "NotificationFrame"
         NotificationFrame.Size = UDim2.new(1, 0, 0, 0)
@@ -479,7 +478,7 @@ function OrionLib:MakeNotification(NotificationConfig)
         NotificationFrame.Parent = NotificationParent
 
         local NotificationCorner = Instance.new("UICorner")
-        NotificationCorner.CornerRadius = UDim.new(0, 10)
+        NotificationCorner.CornerRadius = UDim.new(0, 16)
         NotificationCorner.Parent = NotificationFrame
 
         local Stroke = Instance.new("UIStroke")
@@ -500,7 +499,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         Padding.PaddingBottom = UDim.new(0, 12)
         Padding.Parent = NotificationFrame
 
-        -- ヘッダー
         local Header = Instance.new("Frame")
         Header.Name = "Header"
         Header.Size = UDim2.new(1, 0, 0, 20)
@@ -530,7 +528,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         Title.TextYAlignment = Enum.TextYAlignment.Center
         Title.Parent = Header
 
-        -- 本文
         local Content = Instance.new("TextLabel")
         Content.Name = "Content"
         Content.Size = UDim2.new(1, 0, 0, 0)
@@ -546,9 +543,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         Content.LayoutOrder = 2
         Content.Parent = NotificationFrame
 
-        --========================
-        -- ロードバー外枠
-        --========================
         local ProgressOuter = Instance.new("Frame")
         ProgressOuter.Name = "ProgressOuter"
         ProgressOuter.Size = UDim2.new(1, 0, 0, 10)
@@ -567,9 +561,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         ProgressOuterStroke.Transparency = 0.15
         ProgressOuterStroke.Parent = ProgressOuter
 
-        --========================
-        -- 内側の背景
-        --========================
         local ProgressInner = Instance.new("Frame")
         ProgressInner.Name = "ProgressInner"
         ProgressInner.Size = UDim2.new(1, -4, 1, -4)
@@ -583,9 +574,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         ProgressInnerCorner.CornerRadius = UDim.new(1, 0)
         ProgressInnerCorner.Parent = ProgressInner
 
-        --========================
-        -- 増える白ゲージ
-        --========================
         local ProgressBar = Instance.new("Frame")
         ProgressBar.Name = "ProgressBar"
         ProgressBar.Size = UDim2.new(0, 0, 1, 0)
@@ -598,7 +586,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         ProgressBarCorner.CornerRadius = UDim.new(1, 0)
         ProgressBarCorner.Parent = ProgressBar
 
-        -- 上の光沢
         local ProgressHighlight = Instance.new("Frame")
         ProgressHighlight.Name = "ProgressHighlight"
         ProgressHighlight.Size = UDim2.new(1, 0, 0.45, 0)
@@ -612,7 +599,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         ProgressHighlightCorner.CornerRadius = UDim.new(1, 0)
         ProgressHighlightCorner.Parent = ProgressHighlight
 
-        -- 先端の白い丸っぽい光
         local ProgressTip = Instance.new("Frame")
         ProgressTip.Name = "ProgressTip"
         ProgressTip.AnchorPoint = Vector2.new(1, 0.5)
@@ -627,7 +613,6 @@ function OrionLib:MakeNotification(NotificationConfig)
         ProgressTipCorner.CornerRadius = UDim.new(1, 0)
         ProgressTipCorner.Parent = ProgressTip
 
-        -- 登場アニメーション
         TweenService:Create(
             NotificationFrame,
             TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out),
@@ -636,7 +621,6 @@ function OrionLib:MakeNotification(NotificationConfig)
             }
         ):Play()
 
-        -- バーアニメーション（時間に合わせて増える）
         TweenService:Create(
             ProgressBar,
             TweenInfo.new(NotificationConfig.Time, Enum.EasingStyle.Linear, Enum.EasingDirection.Out),
@@ -647,7 +631,6 @@ function OrionLib:MakeNotification(NotificationConfig)
 
         wait(NotificationConfig.Time - 0.88)
 
-        -- 消える演出
         TweenService:Create(Icon, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {
             ImageTransparency = 1
         }):Play()
