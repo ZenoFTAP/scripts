@@ -16,7 +16,7 @@ local OrionLib = {
 	Flags = {},
 	Themes = {
 		Default = {
-			Main = Color3.fromRGB(25, 25, 25),
+			Main = Color3.fromRGB(0, 0, 0),
 			Second = Color3.fromRGB(32, 32, 32),
 			Stroke = Color3.fromRGB(60, 60, 60),
 			Divider = Color3.fromRGB(60, 60, 60),
@@ -2043,9 +2043,8 @@ function OrionLib:MakeWindow(WindowConfig)
                 DropdownConfig.Flag = DropdownConfig.Flag or nil
                 DropdownConfig.Save = DropdownConfig.Save or false
                 DropdownConfig.MultiSelect = DropdownConfig.MultiSelect or false 
-                DropdownConfig.ShowIcons = DropdownConfig.ShowIcons or false 
 
-                local Dropdown = {Value = {}, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultiSelect = DropdownConfig.MultiSelect, ShowIcons = DropdownConfig.ShowIcons}
+                local Dropdown = {Value = {}, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultiSelect = DropdownConfig.MultiSelect}
                 local MaxElements = 5
 
                 if type(DropdownConfig.Default) == "string" and DropdownConfig.Default ~= "" then
@@ -2094,7 +2093,7 @@ function OrionLib:MakeWindow(WindowConfig)
                             Font = Enum.Font.Gotham,
                             Name = "Selected",
                             TextXAlignment = Enum.TextXAlignment.Right,
-                            TextTruncate = Enum.TextTruncate.AtEnd -- 名前が長すぎる場合に「...」にする
+                            TextTruncate = Enum.TextTruncate.AtEnd -- 名前が長い場合に...で省略
                         }), "TextDark"),
                         AddThemeObject(SetProps(MakeElement("Frame"), {
                             Size = UDim2.new(1, 0, 0, 1),
@@ -2116,50 +2115,21 @@ function OrionLib:MakeWindow(WindowConfig)
                     DropdownContainer.CanvasSize = UDim2.new(0, 0, 0, DropdownList.AbsoluteContentSize.Y)
                 end)  
 
-                local Players = game:GetService("Players")
-
                 local function AddOptions(Options)
                     for _, Option in pairs(Options) do
-                        local textPosition = Dropdown.ShowIcons and 44 or 8 -- アイコンが大きくなったので右にずらす
-                        local textSizeOffset = Dropdown.ShowIcons and -44 or -8
-                        local optionHeight = Dropdown.ShowIcons and 38 or 28 -- アイコンに合わせて高さを出す
-
                         local OptionBtn = AddThemeObject(SetProps(SetChildren(MakeElement("Button", Color3.fromRGB(40, 40, 40)), {
                             MakeElement("Corner", 0, 6),
-                            AddThemeObject(SetProps(MakeElement("Label", Option, 12, 0.4), {
-                                Position = UDim2.new(0, textPosition, 0, 0),
-                                Size = UDim2.new(1, textSizeOffset, 1, 0),
+                            AddThemeObject(SetProps(MakeElement("Label", Option, 13, 0.4), {
+                                Position = UDim2.new(0, 8, 0, 0),
+                                Size = UDim2.new(1, -8, 1, 0),
                                 Name = "Title"
                             }), "Text")
                         }), {
                             Parent = DropdownContainer,
-                            Size = UDim2.new(1, 0, 0, optionHeight),
+                            Size = UDim2.new(1, 0, 0, 28),
                             BackgroundTransparency = 1,
                             ClipsDescendants = true
                         }), "Divider")
-
-                        if Dropdown.ShowIcons then
-                            local OptionIcon = SetProps(MakeElement("Image"), {
-                                Parent = OptionBtn,
-                                Name = "Icon",
-                                Size = UDim2.new(0, 30, 0, 30), -- ★アイコンサイズを大きく修正
-                                AnchorPoint = Vector2.new(0, 0.5),
-                                Position = UDim2.new(0, 8, 0.5, 0),
-                                ImageTransparency = 0.4,
-                            })
-                            SetProps(MakeElement("Corner", 0, 5), {Parent = OptionIcon})
-
-                            task.spawn(function()
-                                -- ★ID抽出の正規表現を強化
-                                local userId = Option:match("ID:%s*(%d+)") 
-                                if userId then
-                                    local content, isReady = Players:GetUserThumbnailAsync(tonumber(userId), Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
-                                    if isReady and OptionIcon.Parent then
-                                        OptionIcon.Image = content
-                                    end
-                                end
-                            end)
-                        end
 
                         AddConnection(OptionBtn.MouseButton1Click, function()
                             Dropdown:Set(Option)
@@ -2185,28 +2155,20 @@ function OrionLib:MakeWindow(WindowConfig)
 
                 function Dropdown:UpdateVisuals()
                     local selectedNames = {}
-                    
+
                     for name, btn in pairs(Dropdown.Buttons) do
                         if Dropdown.Value[name] then
-                            -- ★(ID: ...) を取り除いた表示用の名前だけを取得
-                            local dispName = name:gsub("%s*%(ID:.*%)", "")
-                            table.insert(selectedNames, dispName)
+                            local cleanName = name:gsub("%s*%(ID:.*%)", "")
+                            table.insert(selectedNames, cleanName)
 
-                            TweenService:Create(btn, TweenInfo.new(.15), {BackgroundTransparency = 0}):Play()
-                            TweenService:Create(btn.Title, TweenInfo.new(.15), {TextTransparency = 0}):Play()
-                            if btn:FindFirstChild("Icon") then
-                                TweenService:Create(btn.Icon, TweenInfo.new(.15), {ImageTransparency = 0}):Play()
-                            end
+                            TweenService:Create(btn, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
+                            TweenService:Create(btn.Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
                         else
-                            TweenService:Create(btn, TweenInfo.new(.15), {BackgroundTransparency = 1}):Play()
-                            TweenService:Create(btn.Title, TweenInfo.new(.15), {TextTransparency = 0.4}):Play()
-                            if btn:FindFirstChild("Icon") then
-                                TweenService:Create(btn.Icon, TweenInfo.new(.15), {ImageTransparency = 0.4}):Play()
-                            end
+                            TweenService:Create(btn, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
+                            TweenService:Create(btn.Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
                         end
                     end
 
-                    -- ★「Selected (n)」ではなく、選択している人の名前をカンマ区切りで表示
                     if #selectedNames > 0 then
                         DropdownFrame.F.Selected.Text = table.concat(selectedNames, ", ")
                     else
@@ -2240,11 +2202,8 @@ function OrionLib:MakeWindow(WindowConfig)
                     Dropdown.Toggled = not Dropdown.Toggled
                     DropdownFrame.F.Line.Visible = Dropdown.Toggled
                     TweenService:Create(DropdownFrame.F.Ico,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Rotation = Dropdown.Toggled and 180 or 0}):Play()
-                    
-                    local optionHeight = Dropdown.ShowIcons and 38 or 28 -- 高さ修正を反映
-                    
                     if #Dropdown.Options > MaxElements then
-                        TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * optionHeight)) or UDim2.new(1, 0, 0, 38)}):Play()
+                        TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * 28)) or UDim2.new(1, 0, 0, 38)}):Play()
                     else
                         TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, DropdownList.AbsoluteContentSize.Y + 38) or UDim2.new(1, 0, 0, 38)}):Play()
                     end
