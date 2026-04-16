@@ -2034,7 +2034,7 @@ function OrionLib:MakeWindow(WindowConfig)
 				return Dropdown
 			end
 
-function ElementFunction:AddDropdown(DropdownConfig)
+                function ElementFunction:AddDropdown(DropdownConfig)
                 DropdownConfig = DropdownConfig or {}
                 DropdownConfig.Name = DropdownConfig.Name or "Dropdown"
                 DropdownConfig.Options = DropdownConfig.Options or {}
@@ -2042,12 +2042,12 @@ function ElementFunction:AddDropdown(DropdownConfig)
                 DropdownConfig.Callback = DropdownConfig.Callback or function() end
                 DropdownConfig.Flag = DropdownConfig.Flag or nil
                 DropdownConfig.Save = DropdownConfig.Save or false
-                DropdownConfig.MultiSelect = DropdownConfig.MultiSelect or false -- 複数選択フラグ追加
+                DropdownConfig.MultiSelect = DropdownConfig.MultiSelect or false
+                DropdownConfig.ShowIcons = DropdownConfig.ShowIcons or false
 
-                local Dropdown = {Value = {}, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultiSelect = DropdownConfig.MultiSelect}
+                local Dropdown = {Value = {}, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save, MultiSelect = DropdownConfig.MultiSelect, ShowIcons = DropdownConfig.ShowIcons}
                 local MaxElements = 5
 
-                -- 初期値のテーブル管理化
                 if type(DropdownConfig.Default) == "string" and DropdownConfig.Default ~= "" then
                     Dropdown.Value[DropdownConfig.Default] = true
                 elseif type(DropdownConfig.Default) == "table" then
@@ -2115,21 +2115,50 @@ function ElementFunction:AddDropdown(DropdownConfig)
                     DropdownContainer.CanvasSize = UDim2.new(0, 0, 0, DropdownList.AbsoluteContentSize.Y)
                 end)  
 
+                local Players = game:GetService("Players")
+
                 local function AddOptions(Options)
                     for _, Option in pairs(Options) do
+                        local textPosition = Dropdown.ShowIcons and 36 or 8
+                        local textSizeOffset = Dropdown.ShowIcons and -36 or -8
+                        local optionHeight = Dropdown.ShowIcons and 32 or 28
+
                         local OptionBtn = AddThemeObject(SetProps(SetChildren(MakeElement("Button", Color3.fromRGB(40, 40, 40)), {
                             MakeElement("Corner", 0, 6),
+                            
                             AddThemeObject(SetProps(MakeElement("Label", Option, 13, 0.4), {
-                                Position = UDim2.new(0, 8, 0, 0),
-                                Size = UDim2.new(1, -8, 1, 0),
+                                Position = UDim2.new(0, textPosition, 0, 0),
+                                Size = UDim2.new(1, textSizeOffset, 1, 0),
                                 Name = "Title"
                             }), "Text")
                         }), {
                             Parent = DropdownContainer,
-                            Size = UDim2.new(1, 0, 0, 28),
+                            Size = UDim2.new(1, 0, 0, optionHeight),
                             BackgroundTransparency = 1,
                             ClipsDescendants = true
                         }), "Divider")
+
+                        if Dropdown.ShowIcons then
+                            local OptionIcon = SetProps(MakeElement("Image"), {
+                                Parent = OptionBtn,
+                                Name = "Icon",
+                                Size = UDim2.new(0, 24, 0, 24),
+                                AnchorPoint = Vector2.new(0, 0.5),
+                                Position = UDim2.new(0, 8, 0.5, 0),
+                                ImageTransparency = 0.4,
+                            })
+                            SetProps(MakeElement("Corner", 0, 4), {Parent = OptionIcon})
+
+                            task.spawn(function()
+                                local userId = Option:match("%(ID: (%d+)%)")
+                                if userId then
+                                    local content, isReady = Players:GetUserThumbnailAsync(tonumber(userId), Enum.ThumbnailType.HeadShot, Enum.ThumbnailSize.Size48x48)
+                                    if isReady and OptionIcon.Parent then
+                                        OptionIcon.Image = content
+                                    end
+                                end
+                            end)
+                        end
 
                         AddConnection(OptionBtn.MouseButton1Click, function()
                             Dropdown:Set(Option)
@@ -2163,9 +2192,15 @@ function ElementFunction:AddDropdown(DropdownConfig)
                             lastSelected = name
                             TweenService:Create(btn, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 0}):Play()
                             TweenService:Create(btn.Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0}):Play()
+                            if btn:FindFirstChild("Icon") then
+                                TweenService:Create(btn.Icon, TweenInfo.new(.15), {ImageTransparency = 0}):Play()
+                            end
                         else
                             TweenService:Create(btn, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {BackgroundTransparency = 1}):Play()
                             TweenService:Create(btn.Title, TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out), {TextTransparency = 0.4}):Play()
+                            if btn:FindFirstChild("Icon") then
+                                TweenService:Create(btn.Icon, TweenInfo.new(.15), {ImageTransparency = 0.4}):Play()
+                            end
                         end
                     end
 
@@ -2202,8 +2237,11 @@ function ElementFunction:AddDropdown(DropdownConfig)
                     Dropdown.Toggled = not Dropdown.Toggled
                     DropdownFrame.F.Line.Visible = Dropdown.Toggled
                     TweenService:Create(DropdownFrame.F.Ico,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Rotation = Dropdown.Toggled and 180 or 0}):Play()
+                    
+                    local optionHeight = Dropdown.ShowIcons and 32 or 28
+                    
                     if #Dropdown.Options > MaxElements then
-                        TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * 28)) or UDim2.new(1, 0, 0, 38)}):Play()
+                        TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, 38 + (MaxElements * optionHeight)) or UDim2.new(1, 0, 0, 38)}):Play()
                     else
                         TweenService:Create(DropdownFrame,TweenInfo.new(.15, Enum.EasingStyle.Quad, Enum.EasingDirection.Out),{Size = Dropdown.Toggled and UDim2.new(1, 0, 0, DropdownList.AbsoluteContentSize.Y + 38) or UDim2.new(1, 0, 0, 38)}):Play()
                     end
