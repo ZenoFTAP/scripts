@@ -949,11 +949,11 @@ local function TypeAnimation()
         WindowName.Text = string.sub(targetText, 1, i) .. "|"
         task.wait(typingSpeed)
     end
-
+    
     WindowName.Text = targetText
 end
 
-spawn(TypeAnimation)
+task.spawn(TypeAnimation)
 
 	local WindowTopBarLine = AddThemeObject(SetProps(MakeElement("Frame"), {
 		Size = UDim2.new(1, 0, 0, 1),
