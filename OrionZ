@@ -934,7 +934,7 @@ function OrionLib:MakeWindow(WindowConfig)
 		}),
 	}), "Second")
 
-llocal WindowName = AddThemeObject(SetProps(MakeElement("Label", "", 14), {
+local WindowName = AddThemeObject(SetProps(MakeElement("Label", "", 14), {
     Size = UDim2.new(1, -30, 2, 0),
     Position = UDim2.new(0, 25, 0, -24),
     Font = Enum.Font.GothamBlack,
